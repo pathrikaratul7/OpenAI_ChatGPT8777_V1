@@ -1,0 +1,32 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:30874",
+      "sslPort": 44341
+    }
+  },
+  "profiles": {
+    "OpenAI_ChatGPT8777": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7154;http://localhost:5178",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "openAiSecret": "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"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
