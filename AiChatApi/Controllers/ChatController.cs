@@ -24,7 +24,7 @@ public class ChatController : ControllerBase
             return BadRequest("Message cannot be empty.");
         }
 
-        try
+        try 
         {
             var aiReply = await _aiService.GetAiResponseAsync(request.Message);
             return Ok(new ChatResponseDto { Reply = aiReply });
