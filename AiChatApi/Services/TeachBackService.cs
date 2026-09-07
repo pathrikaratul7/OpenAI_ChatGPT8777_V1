@@ -78,7 +78,7 @@ Only return valid JSON, no additional text.";
                     StarRating = 2,
                     Level = "Fair",
                     Feedback = string.IsNullOrWhiteSpace(aiResponse)
-                        ? "The evaluator returned an unreadable response. Defaulted to a fair rating."
+                        ? "The evaluator returned an unreadable response. Defaulted to a fair rating." 
                         : aiResponse
                 };
             }
