@@ -31,6 +31,10 @@ public class AnswersController : ControllerBase
             var answer = await _answerService.CreateAnswerAsync(request);
             return CreatedAtAction(nameof(GetAnswer), new { id = answer.Id }, answer);
         }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
         catch (Exception ex)
         {
             return StatusCode(500, $"Error creating answer: {ex.Message}");

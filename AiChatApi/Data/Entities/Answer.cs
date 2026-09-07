@@ -21,8 +21,8 @@ public class Answer
     [StringLength(200)]
     public string Author { get; set; } = string.Empty;
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime CreatedAt { get; set; }
 
     [Timestamp]
     public byte[] RowVersion { get; set; } = [];

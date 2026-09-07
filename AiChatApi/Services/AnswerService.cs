@@ -16,6 +16,13 @@ public class AnswerService : IAnswerService
 
     public async Task<PostAnswerResponse> CreateAnswerAsync(PostAnswerRequest request)
     {
+        // Validate that the Post exists
+        var postExists = await _context.Posts.AnyAsync(p => p.Id == request.PostId);
+        if (!postExists)
+        {
+            throw new InvalidOperationException($"Post with ID {request.PostId} does not exist.");
+        }
+
         var answer = new Answer
         {
             PostId = request.PostId,
