@@ -1,4 +1,6 @@
+using AiChatApi.Data;
 using AiChatApi.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +18,28 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+// Add Entity Framework Core with MSSQL
+builder.Services.AddDbContext<TeachWallDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Register the AI service with a typed HttpClient
 builder.Services.AddHttpClient<IAiService, GroqAiService>();
 
+// Register TeachWall services
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IAnswerService, AnswerService>();
+builder.Services.AddScoped<ITeachBackService, TeachBackService>();
+builder.Services.AddScoped<IUpvoteService, UpvoteService>();
+
 var app = builder.Build();
+
+// Apply migrations automatically
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<TeachWallDbContext>();
+    dbContext.Database.Migrate();
+}
 
 // Enable Swagger in all environments
 app.UseCors("AllowAll");
