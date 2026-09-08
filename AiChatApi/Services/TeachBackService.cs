@@ -8,14 +8,16 @@ public class TeachBackService : ITeachBackService
 {
     private readonly IAiService _aiService;
     private readonly TeachWallDbContext _context;
+    private readonly ITokenService _tokenService;
 
-    public TeachBackService(IAiService aiService, TeachWallDbContext context)
+    public TeachBackService(IAiService aiService, TeachWallDbContext context, ITokenService tokenService)
     {
         _aiService = aiService;
         _context = context;
+        _tokenService = tokenService;
     }
 
-    public async Task<TeachBackResponse> EvaluateExplanationAsync(string topic, string explanation)
+    public async Task<TeachBackResponse> EvaluateExplanationAsync(int userId, string topic, string explanation)
     {
         var prompt = $@"
 Evaluate the following student explanation for accuracy and completeness.
@@ -101,6 +103,19 @@ Only return valid JSON, no additional text.";
             };
             _context.TeachBackEvaluations.Add(dbEvaluation);
             await _context.SaveChangesAsync();
+
+            // Deduct tokens for successful evaluation
+            var combinedContent = $"{topic} {explanation}";
+            var (success, message, remainingTokens) = await _tokenService.DeductTokensAsync(
+                userId, 
+                combinedContent, 
+                "EvaluationCompleted");
+
+            if (!success)
+            {
+                // Log the failed token deduction but don't fail the evaluation
+                System.Diagnostics.Debug.WriteLine($"Token deduction failed for user {userId}: {message}");
+            }
 
             return evaluation;
         }

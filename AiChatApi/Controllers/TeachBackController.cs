@@ -23,14 +23,14 @@ public class TeachBackController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TeachBackResponse>> EvaluateExplanation([FromBody] TeachBackRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Topic) || string.IsNullOrWhiteSpace(request.Text))
+        if (request.UserId <= 0 || string.IsNullOrWhiteSpace(request.Topic) || string.IsNullOrWhiteSpace(request.Text))
         {
-            return BadRequest("Topic and text cannot be empty.");
+            return BadRequest("UserId, Topic and text cannot be empty.");
         }
 
         try
         {
-            var evaluation = await _teachBackService.EvaluateExplanationAsync(request.Topic, request.Text);
+            var evaluation = await _teachBackService.EvaluateExplanationAsync(request.UserId, request.Topic, request.Text);
             return Ok(evaluation);
         }
         catch (Exception ex)

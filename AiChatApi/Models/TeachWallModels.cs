@@ -54,6 +54,7 @@ public class PostAnswerResponse
 /// </summary>
 public class TeachBackRequest
 {
+    public int UserId { get; set; }
     public string Topic { get; set; } = string.Empty;
     public string Text { get; set; } = string.Empty;
 }

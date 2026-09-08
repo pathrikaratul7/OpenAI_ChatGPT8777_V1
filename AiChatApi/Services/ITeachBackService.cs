@@ -4,5 +4,5 @@ namespace AiChatApi.Services;
 
 public interface ITeachBackService
 {
-    Task<TeachBackResponse> EvaluateExplanationAsync(string topic, string explanation);
+    Task<TeachBackResponse> EvaluateExplanationAsync(int userId, string topic, string explanation);
 }
