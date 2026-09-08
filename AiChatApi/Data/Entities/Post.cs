@@ -1,4 +1,3 @@
-using Microsoft.SqlServer.Management.Smo;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,6 +9,9 @@ public class Post
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
+
+    [Required]
+    public int UserId { get; set; }
 
     [Required]
     [StringLength(500)]
@@ -27,15 +29,16 @@ public class Post
     [StringLength(200)]
     public string Author { get; set; } = string.Empty;
 
-    
     public int Upvotes { get; set; } = 0;
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime CreatedAt { get; set; }
 
     [Timestamp]
     public byte[] RowVersion { get; set; } = [];
 
-    // Navigation property
+    // Navigation properties
+    [ForeignKey("UserId")]
+    public virtual User? User { get; set; }
     public virtual ICollection<Answer> Answers { get; set; } = new List<Answer>();
 }

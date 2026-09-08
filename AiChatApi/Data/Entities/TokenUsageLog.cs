@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AiChatApi.Data.Entities;
 
-[Table("Answers")]
-public class Answer
+[Table("TokenUsageLogs")]
+public class TokenUsageLog
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,25 +14,19 @@ public class Answer
     public int UserId { get; set; }
 
     [Required]
-    public int PostId { get; set; }
+    public long TokensUsed { get; set; }
 
     [Required]
-    [StringLength(4000)]
-    public string AnswerText { get; set; } = string.Empty;
+    [StringLength(100)]
+    public string Action { get; set; } = string.Empty; // "PostCreated", "AnswerCreated", etc.
 
-    [Required]
-    [StringLength(200)]
-    public string Author { get; set; } = string.Empty;
+    [StringLength(500)]
+    public string Description { get; set; } = string.Empty;
 
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime CreatedAt { get; set; }
 
-    [Timestamp]
-    public byte[] RowVersion { get; set; } = [];
-
-    // Navigation properties
+    // Navigation property
     [ForeignKey("UserId")]
     public virtual User? User { get; set; }
-    [ForeignKey("PostId")]
-    public virtual Post? Post { get; set; }
 }

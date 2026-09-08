@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAI_ChatGPT8777", "OpenAI_ChatGPT8777\OpenAI_ChatGPT8777.csproj", "{72AAD154-6095-4710-962C-53BF60E38758}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AiChatApi", "AiChatApi\AiChatApi.csproj", "{1846EE40-F4D9-6899-9278-6BD772CBDC3E}"
 EndProject
 Global
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{72AAD154-6095-4710-962C-53BF60E38758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72AAD154-6095-4710-962C-53BF60E38758}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72AAD154-6095-4710-962C-53BF60E38758}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72AAD154-6095-4710-962C-53BF60E38758}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1846EE40-F4D9-6899-9278-6BD772CBDC3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1846EE40-F4D9-6899-9278-6BD772CBDC3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1846EE40-F4D9-6899-9278-6BD772CBDC3E}.Release|Any CPU.ActiveCfg = Release|Any CPU

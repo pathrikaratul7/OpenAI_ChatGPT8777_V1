@@ -1,45 +1,52 @@
 using AiChatApi.Models;
 using AiChatApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AiChatApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/posts")]
-public class PostsController : ControllerBase
+public class PostController : ControllerBase
 {
     private readonly IPostService _postService;
 
-    public PostsController(IPostService postService)
+    public PostController(IPostService postService)
     {
         _postService = postService;
     }
 
     /// <summary>
-    /// POST /api/posts - Create a new doubt post
+    /// POST /api/posts - Create a new post (requires JWT token)
     /// </summary>
     [HttpPost]
     public async Task<ActionResult<PostDoubtResponse>> CreatePost([FromBody] PostDoubtRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Title) || string.IsNullOrWhiteSpace(request.Description))
+        if (!ModelState.IsValid)
         {
-            return BadRequest("Title and description cannot be empty.");
+            return BadRequest(ModelState);
         }
 
         try
         {
-            var post = await _postService.CreatePostAsync(request);
-            return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post);
+            var response = await _postService.CreatePostAsync(request);
+            return CreatedAtAction(nameof(GetPostById), new { id = response.Id }, response);
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
-            return StatusCode(500, $"Error creating post: {ex.Message}");
+            return BadRequest(ex.Message);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(ex.Message);
         }
     }
 
     /// <summary>
-    /// GET /api/posts - Retrieve all posts
+    /// GET /api/posts - Get all posts (no authentication required)
     /// </summary>
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PostDoubtResponse>>> GetAllPosts()
     {
@@ -55,17 +62,18 @@ public class PostsController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/posts/{id} - Retrieve a specific post
+    /// GET /api/posts/{id} - Get post by ID (no authentication required)
     /// </summary>
+    [AllowAnonymous]
     [HttpGet("{id}")]
-    public async Task<ActionResult<PostDoubtResponse>> GetPost(int id)
+    public async Task<ActionResult<PostDoubtResponse>> GetPostById(int id)
     {
         try
         {
             var post = await _postService.GetPostByIdAsync(id);
             if (post == null)
             {
-                return NotFound("Post not found.");
+                return NotFound();
             }
 
             return Ok(post);
@@ -77,20 +85,24 @@ public class PostsController : ControllerBase
     }
 
     /// <summary>
-    /// DELETE /api/posts/{id} - Delete a post
+    /// DELETE /api/posts/{id} - Delete a post (requires JWT token and ownership)
     /// </summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePost(int id)
     {
         try
         {
-            var success = await _postService.DeletePostAsync(id);
-            if (!success)
+            var result = await _postService.DeletePostAsync(id);
+            if (!result)
             {
-                return NotFound("Post not found.");
+                return NotFound();
             }
 
             return NoContent();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(ex.Message);
         }
         catch (Exception ex)
         {
